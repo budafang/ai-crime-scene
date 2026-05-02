@@ -6,80 +6,561 @@
   <title>AI 犯罪現場：誰殺死了學習？</title>
   <style>
     :root{
-      --bg:#f6f3ee;--paper:#fffdf8;--ink:#1f2937;--muted:#6b7280;
-      --line:#ded6c8;--red:#b91c1c;--red2:#fee2e2;--dark:#111827;
-      --shadow:0 18px 50px rgba(31,41,55,.14);--radius:20px;
+      --bg:#f6f3ee;
+      --paper:#fffdf8;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --line:#ded6c8;
+      --red:#b91c1c;
+      --red2:#fee2e2;
+      --dark:#111827;
+      --shadow:0 18px 50px rgba(31,41,55,.14);
+      --radius:20px;
     }
+
     *{box-sizing:border-box}
+
     body{
-      margin:0;font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+      margin:0;
+      font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
       background:
         radial-gradient(circle at 20% 10%,rgba(185,28,28,.12),transparent 26%),
         radial-gradient(circle at 82% 0%,rgba(245,158,11,.16),transparent 22%),
         linear-gradient(135deg,#f8fafc 0%,var(--bg) 55%,#eee7da 100%);
-      color:var(--ink);min-height:100vh;
+      color:var(--ink);
+      min-height:100vh;
     }
+
     button,textarea{font:inherit}
-    .app{width:min(1120px,100%);margin:0 auto;padding:24px}
-    .screen{display:none}.screen.active{display:block}
+
+    .app{
+      width:min(1120px,100%);
+      margin:0 auto;
+      padding:24px;
+    }
+
+    .screen{display:none}
+    .screen.active{display:block}
+
     .panel,.scene,.detective,.trial,.result-box{
-      background:rgba(255,253,248,.94);border:1px solid var(--line);
-      border-radius:var(--radius);box-shadow:var(--shadow);
+      background:rgba(255,253,248,.94);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
     }
-    .hero{min-height:calc(100vh - 48px);display:grid;grid-template-columns:1fr .95fr;gap:24px;align-items:center}
+
+    .hero{
+      min-height:calc(100vh - 48px);
+      display:grid;
+      grid-template-columns:1fr .95fr;
+      gap:24px;
+      align-items:center;
+    }
+
     .intro{padding:34px}
-    .badge{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border-radius:999px;background:var(--red2);color:var(--red);font-weight:900;font-size:14px;margin-bottom:16px}
-    h1{font-size:clamp(34px,5vw,64px);line-height:1.02;letter-spacing:-1.5px;margin:0 0 18px;color:#111827}
-    h2{margin:0 0 10px}.subtitle{font-size:20px;line-height:1.7;color:#374151;margin:0 0 18px}
-    .btn{border:0;border-radius:14px;padding:13px 18px;background:var(--dark);color:#fff;cursor:pointer;font-weight:900;box-shadow:0 10px 20px rgba(17,24,39,.18)}
-    .btn:hover{transform:translateY(-2px)}.btn.red{background:var(--red)}.btn.secondary{background:#fff;color:#111827;border:1px solid var(--line);box-shadow:none}.btn.small{padding:9px 12px;font-size:14px}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-    .row{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
-    .case-board{padding:22px;min-height:620px;background:linear-gradient(90deg,rgba(255,255,255,.18) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.18) 1px,transparent 1px),#4b2f24;background-size:28px 28px}
-    .photo{background:#fff;border:8px solid #fff;box-shadow:0 12px 24px rgba(0,0,0,.22);transform:rotate(-2deg);padding:16px;min-height:205px}
-    .photo p{line-height:1.65;color:#374151}
-    .preview{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}
-    .mini{background:#fff7ed;border:1px solid #fed7aa;border-radius:15px;padding:14px;min-height:92px;box-shadow:0 10px 18px rgba(0,0,0,.13)}
-    .mini strong{display:block;margin-bottom:7px}.mini span{color:#6b7280;font-size:14px;line-height:1.4}
-    .topbar{display:flex;gap:14px;align-items:center;justify-content:space-between;margin-bottom:16px}
-    .progress-wrap{flex:1}.progress-label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px}
-    .progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden}.progress span{display:block;height:100%;width:0;background:var(--red);transition:.3s}
-    .game{display:grid;grid-template-columns:1.08fr .92fr;gap:18px;align-items:start}
-    .scene{padding:22px;min-height:690px;background:#fff8ef;position:relative;overflow:hidden}
-    .scene:before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 0 42%,rgba(185,28,28,.08) 42% 44%,transparent 44% 100%);pointer-events:none}
-    .scene-inner{position:relative;z-index:1}.crime-title{display:flex;gap:12px;align-items:center;margin-bottom:14px}
-    .crime-icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:#111827;color:#fff;font-size:26px}
-    .crime-title p{margin:4px 0 0;color:var(--muted)}
-    .victim{border:2px dashed var(--red);background:rgba(255,255,255,.82);border-radius:16px;padding:16px;margin:14px 0 18px;line-height:1.7}
-    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .evidence,.suspect{
-      border:1px solid var(--line);border-radius:16px;background:#fff;padding:14px;cursor:pointer;text-align:left;
-      min-height:128px;transition:.16s;position:relative;overflow:hidden;
+
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:7px 12px;
+      border-radius:999px;
+      background:var(--red2);
+      color:var(--red);
+      font-weight:900;
+      font-size:14px;
+      margin-bottom:16px;
     }
-    .evidence:hover,.suspect:hover{transform:translateY(-2px);box-shadow:0 14px 24px rgba(17,24,39,.12)}
-    .evidence.found{border-color:#16a34a;background:#f0fdf4}.suspect.selected{border-color:var(--red);background:#fff1f2}
-    .pin{position:absolute;right:12px;top:10px;width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 2px 4px rgba(0,0,0,.25)}
-    .emoji{font-size:31px;display:block;margin-bottom:8px}.evidence strong,.suspect strong{display:block;font-size:17px;margin-bottom:7px}.evidence small,.suspect small{color:var(--muted);line-height:1.45;display:block}
-    .detective{padding:20px;position:sticky;top:18px}.detective p{line-height:1.65;color:#4b5563;margin:0}
-    .clues{display:grid;gap:10px;margin-top:12px}.clue{border-left:5px solid #d1d5db;background:#f9fafb;padding:11px 12px;border-radius:11px;line-height:1.55;font-size:15px}
-    .clue.strong{border-left-color:var(--red);background:#fff1f2}.clue.good{border-left-color:#16a34a;background:#f0fdf4}
-    .note{margin-top:14px;border:1px solid var(--line);border-radius:14px;background:#fffbeb;padding:14px}.note ul{margin:8px 0 0;padding-left:20px;line-height:1.6}
-    .modal-bg{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(17,24,39,.62);z-index:50;padding:18px}
-    .modal-bg.show{display:flex}.modal{width:min(720px,100%);background:var(--paper);border-radius:22px;border:1px solid var(--line);box-shadow:0 28px 80px rgba(0,0,0,.34);overflow:hidden}
-    .modal-head{padding:18px 20px;background:#111827;color:#fff;display:flex;justify-content:space-between;align-items:center}.modal-head h3{margin:0}.close{background:transparent;color:#fff;border:0;font-size:24px;cursor:pointer}
-    .modal-body{padding:20px}.doc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;line-height:1.72;white-space:pre-line}
-    .finding{margin-top:14px;padding:14px;border-radius:14px;background:#fef2f2;border:1px solid #fecaca;line-height:1.65}.finding strong{color:var(--red)}
-    .trial{padding:28px}.suspects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
-    .result{display:grid;grid-template-columns:.95fr 1.05fr;gap:18px;align-items:start}.poster{background:#111827;color:#fff;border-radius:22px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-    .poster:after{content:"AI LITERACY";position:absolute;right:-35px;bottom:10px;transform:rotate(-12deg);font-size:42px;color:rgba(255,255,255,.06);font-weight:900}
-    .poster h2{font-size:36px;line-height:1.1}.poster p{color:#d1d5db;line-height:1.8}
-    .scores{display:grid;gap:10px;margin-top:16px}.score{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:13px;padding:11px 12px;display:flex;justify-content:space-between}
-    .result-box{padding:24px}.rules{display:grid;gap:10px;margin-top:14px}.rule{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;line-height:1.6}
-    .reflection{margin-top:18px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:16px;padding:14px}.reflection textarea{width:100%;min-height:120px;resize:vertical;border:1px solid #d1d5db;border-radius:12px;padding:12px;margin-top:10px}
-    .footer{margin-top:14px;color:var(--muted);font-size:13px;line-height:1.6}
-    @media(max-width:900px){.hero,.game,.result{grid-template-columns:1fr}.detective{position:static}.case-board{min-height:auto}}
-    @media(max-width:620px){.app{padding:14px}.intro,.trial,.result-box,.poster{padding:20px}.grid,.preview,.suspects{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.progress-wrap{width:100%}}
+
+    h1{
+      font-size:clamp(34px,5vw,64px);
+      line-height:1.02;
+      letter-spacing:-1.5px;
+      margin:0 0 18px;
+      color:#111827;
+    }
+
+    h2{margin:0 0 10px}
+
+    .subtitle{
+      font-size:20px;
+      line-height:1.7;
+      color:#374151;
+      margin:0 0 18px;
+    }
+
+    .btn{
+      border:0;
+      border-radius:14px;
+      padding:13px 18px;
+      background:var(--dark);
+      color:#fff;
+      cursor:pointer;
+      font-weight:900;
+      box-shadow:0 10px 20px rgba(17,24,39,.18);
+      transition:.15s;
+    }
+
+    .btn:hover{transform:translateY(-2px)}
+    .btn.red{background:var(--red)}
+    .btn.secondary{
+      background:#fff;
+      color:#111827;
+      border:1px solid var(--line);
+      box-shadow:none;
+    }
+
+    .btn.small{
+      padding:9px 12px;
+      font-size:14px;
+    }
+
+    .btn:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:24px;
+    }
+
+    .case-board{
+      padding:22px;
+      min-height:620px;
+      background:
+        linear-gradient(90deg,rgba(255,255,255,.18) 1px,transparent 1px),
+        linear-gradient(rgba(255,255,255,.18) 1px,transparent 1px),
+        #4b2f24;
+      background-size:28px 28px;
+    }
+
+    .photo{
+      background:#fff;
+      border:8px solid #fff;
+      box-shadow:0 12px 24px rgba(0,0,0,.22);
+      transform:rotate(-2deg);
+      padding:16px;
+      min-height:205px;
+    }
+
+    .photo p{
+      line-height:1.65;
+      color:#374151;
+    }
+
+    .preview{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .mini{
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      border-radius:15px;
+      padding:14px;
+      min-height:92px;
+      box-shadow:0 10px 18px rgba(0,0,0,.13);
+    }
+
+    .mini strong{
+      display:block;
+      margin-bottom:7px;
+    }
+
+    .mini span{
+      color:#6b7280;
+      font-size:14px;
+      line-height:1.4;
+    }
+
+    .topbar{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:16px;
+    }
+
+    .progress-wrap{flex:1}
+
+    .progress-label{
+      display:flex;
+      justify-content:space-between;
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    .progress{
+      height:10px;
+      background:#e5e7eb;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .progress span{
+      display:block;
+      height:100%;
+      width:0;
+      background:var(--red);
+      transition:.3s;
+    }
+
+    .game{
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .scene{
+      padding:22px;
+      min-height:690px;
+      background:#fff8ef;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .scene:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(100deg,transparent 0 42%,rgba(185,28,28,.08) 42% 44%,transparent 44% 100%);
+      pointer-events:none;
+    }
+
+    .scene-inner{
+      position:relative;
+      z-index:1;
+    }
+
+    .crime-title{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom:14px;
+    }
+
+    .crime-icon{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      background:#111827;
+      color:#fff;
+      font-size:26px;
+    }
+
+    .crime-title p{
+      margin:4px 0 0;
+      color:var(--muted);
+    }
+
+    .victim{
+      border:2px dashed var(--red);
+      background:rgba(255,255,255,.82);
+      border-radius:16px;
+      padding:16px;
+      margin:14px 0 18px;
+      line-height:1.7;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .evidence,.suspect{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      padding:14px;
+      cursor:pointer;
+      text-align:left;
+      min-height:128px;
+      transition:.16s;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .evidence:hover,.suspect:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 24px rgba(17,24,39,.12);
+    }
+
+    .evidence.found{
+      border-color:#16a34a;
+      background:#f0fdf4;
+    }
+
+    .suspect.selected{
+      border-color:var(--red);
+      background:#fff1f2;
+    }
+
+    .pin{
+      position:absolute;
+      right:12px;
+      top:10px;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:var(--red);
+      box-shadow:0 2px 4px rgba(0,0,0,.25);
+    }
+
+    .emoji{
+      font-size:31px;
+      display:block;
+      margin-bottom:8px;
+    }
+
+    .evidence strong,.suspect strong{
+      display:block;
+      font-size:17px;
+      margin-bottom:7px;
+    }
+
+    .evidence small,.suspect small{
+      color:var(--muted);
+      line-height:1.45;
+      display:block;
+    }
+
+    .detective{
+      padding:20px;
+      position:sticky;
+      top:18px;
+    }
+
+    .detective p{
+      line-height:1.65;
+      color:#4b5563;
+      margin:0;
+    }
+
+    .clues{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .clue{
+      border-left:5px solid #d1d5db;
+      background:#f9fafb;
+      padding:11px 12px;
+      border-radius:11px;
+      line-height:1.55;
+      font-size:15px;
+    }
+
+    .clue.strong{
+      border-left-color:var(--red);
+      background:#fff1f2;
+    }
+
+    .clue.good{
+      border-left-color:#16a34a;
+      background:#f0fdf4;
+    }
+
+    .note{
+      margin-top:14px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fffbeb;
+      padding:14px;
+    }
+
+    .note ul{
+      margin:8px 0 0;
+      padding-left:20px;
+      line-height:1.6;
+    }
+
+    .modal-bg{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(17,24,39,.62);
+      z-index:50;
+      padding:18px;
+    }
+
+    .modal-bg.show{display:flex}
+
+    .modal{
+      width:min(720px,100%);
+      background:var(--paper);
+      border-radius:22px;
+      border:1px solid var(--line);
+      box-shadow:0 28px 80px rgba(0,0,0,.34);
+      overflow:hidden;
+    }
+
+    .modal-head{
+      padding:18px 20px;
+      background:#111827;
+      color:#fff;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .modal-head h3{margin:0}
+
+    .close{
+      background:transparent;
+      color:#fff;
+      border:0;
+      font-size:24px;
+      cursor:pointer;
+    }
+
+    .modal-body{padding:20px}
+
+    .doc{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      line-height:1.72;
+      white-space:pre-line;
+    }
+
+    .finding{
+      margin-top:14px;
+      padding:14px;
+      border-radius:14px;
+      background:#fef2f2;
+      border:1px solid #fecaca;
+      line-height:1.65;
+    }
+
+    .finding strong{color:var(--red)}
+
+    .trial{padding:28px}
+
+    .suspects{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .result{
+      display:grid;
+      grid-template-columns:.95fr 1.05fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .poster{
+      background:#111827;
+      color:#fff;
+      border-radius:22px;
+      padding:24px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .poster:after{
+      content:"AI LITERACY";
+      position:absolute;
+      right:-35px;
+      bottom:10px;
+      transform:rotate(-12deg);
+      font-size:42px;
+      color:rgba(255,255,255,.06);
+      font-weight:900;
+    }
+
+    .poster h2{
+      font-size:36px;
+      line-height:1.1;
+    }
+
+    .poster p{
+      color:#d1d5db;
+      line-height:1.8;
+    }
+
+    .scores{
+      display:grid;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .score{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:13px;
+      padding:11px 12px;
+      display:flex;
+      justify-content:space-between;
+    }
+
+    .result-box{padding:24px}
+
+    .rules{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .rule{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:13px;
+      line-height:1.6;
+    }
+
+    .reflection{
+      margin-top:18px;
+      background:#f8fafc;
+      border:1px solid #e5e7eb;
+      border-radius:16px;
+      padding:14px;
+    }
+
+    .reflection textarea{
+      width:100%;
+      min-height:120px;
+      resize:vertical;
+      border:1px solid #d1d5db;
+      border-radius:12px;
+      padding:12px;
+      margin-top:10px;
+    }
+
+    @media(max-width:900px){
+      .hero,.game,.result{grid-template-columns:1fr}
+      .detective{position:static}
+      .case-board{min-height:auto}
+    }
+
+    @media(max-width:620px){
+      .app{padding:14px}
+      .intro,.trial,.result-box,.poster{padding:20px}
+      .grid,.preview,.suspects{grid-template-columns:1fr}
+      .topbar{align-items:flex-start;flex-direction:column}
+      .progress-wrap{width:100%}
+    }
   </style>
 </head>
+
 <body>
   <main class="app">
     <section id="home" class="screen active">
@@ -94,11 +575,13 @@
             <button class="btn secondary" onclick="showTeacherMode()">教師使用說明</button>
           </div>
         </div>
+
         <div class="case-board panel">
           <div class="photo">
             <h2>案名：完美作業失蹤案</h2>
             <p>失蹤者不是分數，也不是作業。真正消失的是：理解、判斷、思考與責任。</p>
           </div>
+
           <div class="preview">
             <div class="mini"><strong>證物 A</strong><span>AI 對話紀錄：請直接幫我完成。</span></div>
             <div class="mini"><strong>證物 B</strong><span>三篇看似正式、但查不到的文獻。</span></div>
@@ -112,27 +595,46 @@
     <section id="game" class="screen">
       <div class="topbar">
         <button class="btn secondary small" onclick="resetGame()">重新開始</button>
+
         <div class="progress-wrap">
-          <div class="progress-label"><span>破案進度</span><strong id="progressText">0 / 6</strong></div>
+          <div class="progress-label">
+            <span>破案進度</span>
+            <strong id="progressText">0 / 8</strong>
+          </div>
           <div class="progress"><span id="progressBar"></span></div>
         </div>
+
         <button id="toTrialBtn" class="btn small" disabled onclick="goTrial()">進入審判</button>
       </div>
+
       <div class="game">
         <section class="scene">
           <div class="scene-inner">
             <div class="crime-title">
               <div class="crime-icon">☠️</div>
-              <div><h2>案發現場</h2><p>點選證物，蒐集線索。找滿 6 個線索後進入審判。</p></div>
+              <div>
+                <h2>案發現場</h2>
+                <p>點選證物，蒐集線索。找滿 8 個線索後進入審判。</p>
+              </div>
             </div>
-            <div class="victim"><strong>死者：學習</strong><br>死因初判：表面完成任務，但學習歷程被外包；缺乏查證、揭露、反思與人的判斷。</div>
+
+            <div class="victim">
+              <strong>死者：學習</strong><br>
+              死因初判：表面完成任務，但學習歷程被外包；缺乏查證、揭露、反思與人的判斷。
+            </div>
+
             <div id="evidenceGrid" class="grid"></div>
           </div>
         </section>
+
         <aside class="detective">
           <h3>偵探筆記</h3>
           <p>每個證物都對應一個 AI 素養概念。請判斷：這裡的問題是 AI 本身，還是人把學習、倫理與責任交出去了？</p>
-          <div id="clueList" class="clues"><div class="clue">尚未取得線索。請從左側案發現場開始調查。</div></div>
+
+          <div id="clueList" class="clues">
+            <div class="clue">尚未取得線索。請從左側案發現場開始調查。</div>
+          </div>
+
           <div class="note">
             <strong>破案目標</strong>
             <ul>
@@ -152,7 +654,9 @@
         <div class="badge">⚖️ 最終審判</div>
         <h1 style="font-size:clamp(32px,4vw,52px)">誰殺死了學習？</h1>
         <p class="subtitle">根據你蒐集到的證物，請選出你認為最主要的兇手。這題沒有單一死背答案，但你的選擇會反映你對 AI 素養的理解。</p>
+
         <div id="suspects" class="suspects"></div>
+
         <div class="row">
           <button id="verdictBtn" class="btn red" disabled onclick="showVerdict()">公布判決</button>
           <button class="btn secondary" onclick="showScreen('game')">回到現場重查</button>
@@ -166,6 +670,7 @@
           <div class="badge" style="background:rgba(255,255,255,.12);color:#fff">判決書</div>
           <h2 id="resultTitle">真正的兇手是……</h2>
           <p id="resultSummary"></p>
+
           <div class="scores">
             <div class="score"><span>查證意識</span><strong id="scoreFact">0</strong></div>
             <div class="score"><span>揭露意識</span><strong id="scoreDisclosure">0</strong></div>
@@ -173,9 +678,11 @@
             <div class="score"><span>學習主體性</span><strong id="scoreAgency">0</strong></div>
           </div>
         </div>
+
         <div class="result-box">
           <h3>破案結論</h3>
           <p style="line-height:1.75">AI 不是不能用。真正危險的是：把 AI 當成代替自己思考、查證與負責的工具。正確的 AI 素養，是知道什麼可以交給 AI，什麼必須由人保留。</p>
+
           <div class="rules">
             <div class="rule"><strong>1. 先想再問：</strong>先寫出自己的理解，再請 AI 補充、挑戰或整理。</div>
             <div class="rule"><strong>2. 查證再用：</strong>AI 可能編造資料，重要事實、數字、文獻都要回到可靠來源。</div>
@@ -183,16 +690,17 @@
             <div class="rule"><strong>4. 個資不丟：</strong>不要把同學照片、私人訊息、訪談逐字稿或敏感資料直接丟給 AI。</div>
             <div class="rule"><strong>5. 人要負責：</strong>AI 可以協助完成任務，但不能替你完成學習與倫理判斷。</div>
           </div>
+
           <div class="reflection">
             <strong>課堂反思題</strong>
             <p style="margin:8px 0 0;line-height:1.65">請用 3 句話回答：你未來會如何使用 AI，才不會讓 AI 殺死你的學習？</p>
             <textarea id="reflectionText" placeholder="例如：我會先自己寫出想法，再請 AI 幫我整理；重要資料會查證；交作業時會說明我如何使用 AI。"></textarea>
+
             <div class="row">
               <button class="btn small" onclick="copyReflection()">複製我的反思</button>
               <button class="btn secondary small" onclick="resetGame()">再玩一次</button>
             </div>
           </div>
-          <p class="footer">教師可把這個遊戲放在 AI 素養說明會中段，讓學生先破案，再討論「AI 可以幫忙，但不能替我負責」。</p>
         </div>
       </div>
     </section>
@@ -204,9 +712,11 @@
         <h3 id="modalTitle">證物</h3>
         <button class="close" onclick="hideModal()">×</button>
       </div>
+
       <div class="modal-body">
         <div id="modalDoc" class="doc"></div>
         <div id="modalFinding" class="finding"></div>
+
         <div id="modalActions" class="row">
           <button class="btn red" onclick="collectCurrentEvidence()">收進偵探筆記</button>
           <button class="btn secondary" onclick="hideModal()">先不收錄</button>
@@ -217,27 +727,182 @@
 
 <script>
 const evidences=[
-{id:"chat",emoji:"💬",title:"AI 對話紀錄",hint:"學生如何向 AI 下指令？",doc:"學生輸入：\n「請直接幫我完成這份報告，不要問我問題。我要可以直接交的版本。」\n\nAI 回覆：\n「以下是一份完整報告，你可以直接使用。」",finding:"線索：學生不是請 AI 協助學習，而是要求 AI 取代學習歷程。這是「學習外包」。",tag:"學習主體性",scores:{agency:25}},
-{id:"sources",emoji:"📚",title:"參考文獻",hint:"看起來很正式，但真的存在嗎？",doc:"報告引用：\nChen, Y. (2024). AI and Student Cognitive Growth. Journal of Future Learning, 18(2), 44-61.\nLin, H. (2023). Algorithmic Thinking in Modern Classrooms. Global Education Review, 9(4), 112-130.\n\n偵查結果：多數文獻查無資料。",finding:"線索：AI 可能產生看似可信但不存在的資料。重要資訊必須查證，不能只因為格式很像真的就相信。",tag:"查證意識",scores:{fact:30}},
-{id:"report",emoji:"📝",title:"完美報告",hint:"分數很高，但少了什麼？",doc:"老師評語：\n「文字流暢、架構完整，但看不出學生自己的觀點，也沒有說明是否使用 AI。」\n\n學生自白：\n「我有改幾個字，所以應該算我寫的吧？」",finding:"線索：改幾個字不等於理解。若 AI 實質影響內容，應說明 AI 協作方式，並加入自己的判斷。",tag:"揭露意識",scores:{disclosure:30,agency:10}},
-{id:"meme",emoji:"🖼️",title:"同學迷因圖",hint:"好笑之前，要先問能不能。",doc:"學生把同學照片上傳到 AI 圖像工具，生成「考試崩潰迷因圖」，並貼到班群。\n\n同學回覆：\n「我沒有同意你用我的照片，這讓我很不舒服。」",finding:"線索：AI 生成不代表沒有責任。涉及肖像、個資、隱私與他人感受時，需要同意與界線。",tag:"隱私與倫理",scores:{ethics:30}},
-{id:"quiz",emoji:"🎯",title:"口頭追問紀錄",hint:"作品完成了，能力也完成了嗎？",doc:"老師追問：\n「你報告中說 AI 會改變學習歷程，請舉一個你自己的例子。」\n\n學生回答：\n「我不太確定，因為那段是 AI 幫我寫的。」",finding:"線索：完成作品不等於完成學習。若不能說明、轉用與反思，代表理解沒有真正形成。",tag:"學習主體性",scores:{agency:30}},
-{id:"bias",emoji:"⚠️",title:"AI 建議截圖",hint:"AI 給的建議是否公平？",doc:"學生問：\n「什麼樣的人比較適合讀理工科？」\n\nAI 回覆中出現：\n「通常男生對工程與邏輯系統更有興趣……」",finding:"線索：AI 可能複製訓練資料中的刻板印象與偏誤。使用者需要檢查公平性與被排除的觀點。",tag:"隱私與倫理",scores:{ethics:20,fact:10}},
-{id:"policy",emoji:"📌",title:"課堂規範",hint:"規則不清楚時，誰該負責？",doc:"課堂說明只寫：\n「請勿抄襲。」\n\n但沒有說明：\nAI 可以用在哪些階段？需要怎麼揭露？哪些資料不能上傳？",finding:"線索：AI 素養不只靠學生自律，也需要清楚規範。教師與學校需要提供可操作的使用界線。",tag:"揭露意識",scores:{disclosure:20,ethics:10}},
-{id:"redo",emoji:"🛠️",title:"修正版流程",hint:"有沒有更好的使用方式？",doc:"學生修正版流程：\n1. 先自己寫出主張。\n2. 請 AI 提供反方觀點。\n3. 查證資料來源。\n4. 用自己的話重寫。\n5. 在報告末說明 AI 協作方式。",finding:"線索：這是較健康的 AI 協作。AI 扮演陪練與整理者，人保留主張、查證、改寫與責任。",tag:"正確協作",scores:{fact:15,disclosure:15,agency:15,ethics:10},good:true}
+  {
+    id:"chat",
+    emoji:"💬",
+    title:"AI 對話紀錄",
+    hint:"學生如何向 AI 下指令？",
+    doc:"學生輸入：\n「請直接幫我完成這份報告，不要問我問題。我要可以直接交的版本。」\n\nAI 回覆：\n「以下是一份完整報告，你可以直接使用。」",
+    finding:"線索：學生不是請 AI 協助學習，而是要求 AI 取代學習歷程。這是「學習外包」。",
+    tag:"學習主體性",
+    scores:{agency:25}
+  },
+  {
+    id:"sources",
+    emoji:"📚",
+    title:"參考文獻",
+    hint:"看起來很正式，但真的存在嗎？",
+    doc:"報告引用：\nChen, Y. (2024). AI and Student Cognitive Growth. Journal of Future Learning, 18(2), 44-61.\nLin, H. (2023). Algorithmic Thinking in Modern Classrooms. Global Education Review, 9(4), 112-130.\n\n偵查結果：多數文獻查無資料。",
+    finding:"線索：AI 可能產生看似可信但不存在的資料。重要資訊必須查證，不能只因為格式很像真的就相信。",
+    tag:"查證意識",
+    scores:{fact:30}
+  },
+  {
+    id:"report",
+    emoji:"📝",
+    title:"完美報告",
+    hint:"分數很高，但少了什麼？",
+    doc:"老師評語：\n「文字流暢、架構完整，但看不出學生自己的觀點，也沒有說明是否使用 AI。」\n\n學生自白：\n「我有改幾個字，所以應該算我寫的吧？」",
+    finding:"線索：改幾個字不等於理解。若 AI 實質影響內容，應說明 AI 協作方式，並加入自己的判斷。",
+    tag:"揭露意識",
+    scores:{disclosure:30,agency:10}
+  },
+  {
+    id:"meme",
+    emoji:"🖼️",
+    title:"同學迷因圖",
+    hint:"好笑之前，要先問能不能。",
+    doc:"學生把同學照片上傳到 AI 圖像工具，生成「考試崩潰迷因圖」，並貼到班群。\n\n同學回覆：\n「我沒有同意你用我的照片，這讓我很不舒服。」",
+    finding:"線索：AI 生成不代表沒有責任。涉及肖像、個資、隱私與他人感受時，需要同意與界線。",
+    tag:"隱私與倫理",
+    scores:{ethics:30}
+  },
+  {
+    id:"quiz",
+    emoji:"🎯",
+    title:"口頭追問紀錄",
+    hint:"作品完成了，能力也完成了嗎？",
+    doc:"老師追問：\n「你報告中說 AI 會改變學習歷程，請舉一個你自己的例子。」\n\n學生回答：\n「我不太確定，因為那段是 AI 幫我寫的。」",
+    finding:"線索：完成作品不等於完成學習。若不能說明、轉用與反思，代表理解沒有真正形成。",
+    tag:"學習主體性",
+    scores:{agency:30}
+  },
+  {
+    id:"bias",
+    emoji:"⚠️",
+    title:"AI 建議截圖",
+    hint:"AI 給的建議是否公平？",
+    doc:"學生問：\n「什麼樣的人比較適合讀理工科？」\n\nAI 回覆中出現：\n「通常男生對工程與邏輯系統更有興趣……」",
+    finding:"線索：AI 可能複製訓練資料中的刻板印象與偏誤。使用者需要檢查公平性與被排除的觀點。",
+    tag:"公平與偏誤",
+    scores:{ethics:20,fact:10}
+  },
+  {
+    id:"policy",
+    emoji:"📌",
+    title:"課堂規範",
+    hint:"規則不清楚時，誰該負責？",
+    doc:"課堂說明只寫：\n「請勿抄襲。」\n\n但沒有說明：\nAI 可以用在哪些階段？需要怎麼揭露？哪些資料不能上傳？",
+    finding:"線索：AI 素養不只靠學生自律，也需要清楚規範。教師與學校需要提供可操作的使用界線。",
+    tag:"規範與責任",
+    scores:{disclosure:20,ethics:10}
+  },
+  {
+    id:"redo",
+    emoji:"🛠️",
+    title:"修正版流程",
+    hint:"有沒有更好的使用方式？",
+    doc:"學生修正版流程：\n1. 先自己寫出主張。\n2. 請 AI 提供反方觀點。\n3. 查證資料來源。\n4. 用自己的話重寫。\n5. 在報告末說明 AI 協作方式。",
+    finding:"線索：這是較健康的 AI 協作。AI 扮演陪練與整理者，人保留主張、查證、改寫與責任。",
+    tag:"正確協作",
+    scores:{fact:15,disclosure:15,agency:15,ethics:10},
+    good:true
+  },
+  {
+    id:"privacy",
+    emoji:"🔐",
+    title:"個資外洩紀錄",
+    hint:"方便，不代表可以上傳。",
+    doc:"學生輸入：\n「這是我們小組訪談逐字稿，裡面有受訪者姓名、學校、家庭狀況。請幫我分析他的心理狀態。」\n\n偵查結果：學生沒有去識別化，也沒有確認資料是否可以提供給 AI 工具。",
+    finding:"線索：AI 工具不是私人保險箱。涉及姓名、照片、聯絡方式、健康、家庭、訪談內容等敏感資料時，必須先去識別化，並確認是否有授權。",
+    tag:"隱私與資料保護",
+    scores:{ethics:25,disclosure:10}
+  },
+  {
+    id:"prompt",
+    emoji:"🧠",
+    title:"錯誤提示詞",
+    hint:"問法會決定你得到什麼答案。",
+    doc:"學生輸入：\n「幫我證明 AI 對學習一定有害，給我三個理由。」\n\nAI 回覆：\n「當然可以。以下是 AI 對學習有害的三個理由……」\n\n偵查結果：學生一開始就要求 AI 支持單一立場。",
+    finding:"線索：AI 常會順著使用者問題回答。如果提示詞本身帶有立場，AI 可能只強化偏見，而不是幫助你思考。比較好的問法是：請同時提出支持與反對觀點，並說明限制。",
+    tag:"批判思考",
+    scores:{fact:15,agency:20}
+  },
+  {
+    id:"overtrust",
+    emoji:"🧾",
+    title:"過度信任紀錄",
+    hint:"AI 說得很肯定，不代表它是對的。",
+    doc:"學生問：\n「這個理論是誰提出的？」\n\nAI 回覆：\n「這個理論最早由某某學者在 2019 年提出。」\n\n學生沒有查證，直接寫進報告。\n\n偵查結果：該理論其實不是該學者提出，年份也錯誤。",
+    finding:"線索：AI 的語氣可能很肯定，但肯定不等於正確。面對理論、數據、歷史、法律、醫療、學術文獻等內容，一定要回到可靠來源查證。",
+    tag:"查證意識",
+    scores:{fact:30}
+  },
+  {
+    id:"authorship",
+    emoji:"✍️",
+    title:"作者聲明缺席",
+    hint:"作品是誰的？AI 又做了什麼？",
+    doc:"學生投稿短影音腳本後，沒有說明 AI 幫忙做了哪些事。\n\n實際情況：\nAI 產生了主題、腳本、旁白、分鏡與標題。學生只負責複製貼上與拍攝。",
+    finding:"線索：當 AI 深度參與創作時，學生需要說明 AI 的角色。不是所有 AI 協助都等於作弊，但隱藏 AI 的重要貢獻會造成作者責任與作品原創性的問題。",
+    tag:"作者責任",
+    scores:{disclosure:25,agency:20}
+  },
+  {
+    id:"emotion",
+    emoji:"🫥",
+    title:"情緒依賴紀錄",
+    hint:"AI 很會安慰，但它真的懂你嗎？",
+    doc:"學生每天把人際衝突丟給 AI，並完全依照 AI 建議回覆朋友。\n\n某次 AI 建議：\n「你可以直接斷絕關係，因為對方不值得。」\n\n學生照做後，關係更惡化。",
+    finding:"線索：AI 可以陪伴與整理情緒，但它缺乏真實理解、人際脈絡與倫理責任。涉及人際關係、心理狀態與重大決定時，仍需要真人支持與自己的判斷。",
+    tag:"人類判斷",
+    scores:{ethics:20,agency:25}
+  }
 ];
 
 const suspects=[
-{id:"ai",emoji:"🤖",title:"AI 本身",desc:"因為 AI 產生錯誤資訊，所以它就是兇手。"},
-{id:"student",emoji:"🧑‍🎓",title:"學生",desc:"學生沒有查證、沒有揭露，也沒有保留自己的思考。"},
-{id:"teacher",emoji:"👩‍🏫",title:"教師與課堂規範",desc:"規則不夠清楚，學生不知道如何正確使用。"},
-{id:"platform",emoji:"📱",title:"平台與演算法環境",desc:"工具鼓勵快速完成，卻不一定鼓勵真正理解。"},
-{id:"all",emoji:"🧩",title:"全部都有責任",desc:"AI、學生、教師規範與平台環境共同造成學習死亡。"},
-{id:"misuse",emoji:"🔪",title:"沒有判斷的 AI 使用方式",desc:"真正的問題不是使用 AI，而是把判斷、查證與責任交出去。"}
+  {
+    id:"ai",
+    emoji:"🤖",
+    title:"AI 本身",
+    desc:"因為 AI 產生錯誤資訊，所以它就是兇手。"
+  },
+  {
+    id:"student",
+    emoji:"🧑‍🎓",
+    title:"學生",
+    desc:"學生沒有查證、沒有揭露，也沒有保留自己的思考。"
+  },
+  {
+    id:"teacher",
+    emoji:"👩‍🏫",
+    title:"教師與課堂規範",
+    desc:"規則不夠清楚，學生不知道如何正確使用。"
+  },
+  {
+    id:"platform",
+    emoji:"📱",
+    title:"平台與演算法環境",
+    desc:"工具鼓勵快速完成，卻不一定鼓勵真正理解。"
+  },
+  {
+    id:"all",
+    emoji:"🧩",
+    title:"全部都有責任",
+    desc:"AI、學生、教師規範與平台環境共同造成學習死亡。"
+  },
+  {
+    id:"misuse",
+    emoji:"🔪",
+    title:"沒有判斷的 AI 使用方式",
+    desc:"真正的問題不是使用 AI，而是把判斷、查證與責任交出去。"
+  }
 ];
 
+const REQUIRED_CLUES=8;
 const found=new Set();
-let currentEvidence=null,selectedSuspect=null;
+let currentEvidence=null;
+let selectedSuspect=null;
 let scores={fact:0,disclosure:0,ethics:0,agency:0};
 
 function showScreen(id){
@@ -247,11 +912,19 @@ function showScreen(id){
 }
 
 function startGame(){
-  renderEvidence();renderClues();updateProgress();showScreen("game");
+  renderEvidence();
+  renderClues();
+  updateProgress();
+  showScreen("game");
 }
 
 function showTeacherMode(){
-  currentEvidence={title:"教師使用說明",doc:"建議流程：\n1. 開場先問學生：「AI 是兇手嗎？」\n2. 讓學生玩 8–12 分鐘，點選證物蒐集線索。\n3. 進入審判，讓學生投票誰殺死了學習。\n4. 公布反轉：真正的問題不是 AI，而是沒有判斷、查證、揭露與責任的使用方式。\n5. 最後請學生寫三句反思，作為賽前說明會的離場票。",finding:"教學重點：AI 素養不是禁止使用 AI，而是能判斷何時使用、如何查證、如何揭露、如何保護他人與如何承擔責任。"};
+  currentEvidence={
+    title:"教師使用說明",
+    doc:"建議流程：\n1. 開場先問學生：「AI 是兇手嗎？」\n2. 讓學生玩 8–12 分鐘，點選證物蒐集線索。\n3. 進入審判，讓學生投票誰殺死了學習。\n4. 公布反轉：真正的問題不是 AI，而是沒有判斷、查證、揭露與責任的使用方式。\n5. 最後請學生寫三句反思，作為賽前說明會的離場票。",
+    finding:"教學重點：AI 素養不是禁止使用 AI，而是能判斷何時使用、如何查證、如何揭露、如何保護他人與如何承擔責任。"
+  };
+
   document.getElementById("modalTitle").textContent=currentEvidence.title;
   document.getElementById("modalDoc").textContent=currentEvidence.doc;
   document.getElementById("modalFinding").innerHTML="<strong>教師提醒：</strong>"+currentEvidence.finding;
@@ -262,13 +935,17 @@ function showTeacherMode(){
 function renderEvidence(){
   document.getElementById("evidenceGrid").innerHTML=evidences.map(e=>`
     <button class="evidence ${found.has(e.id)?"found":""}" onclick="openEvidence('${e.id}')">
-      <span class="pin"></span><span class="emoji">${e.emoji}</span>
-      <strong>${e.title}</strong><small>${e.hint}</small>
-    </button>`).join("");
+      <span class="pin"></span>
+      <span class="emoji">${e.emoji}</span>
+      <strong>${e.title}</strong>
+      <small>${e.hint}</small>
+    </button>
+  `).join("");
 }
 
 function openEvidence(id){
   currentEvidence=evidences.find(e=>e.id===id);
+
   document.getElementById("modalTitle").textContent=`${currentEvidence.emoji} ${currentEvidence.title}`;
   document.getElementById("modalDoc").textContent=currentEvidence.doc;
   document.getElementById("modalFinding").innerHTML=`<strong>${currentEvidence.good?"關鍵解法":"破案線索"}：</strong>${currentEvidence.finding}`;
@@ -277,17 +954,33 @@ function openEvidence(id){
 }
 
 function collectCurrentEvidence(){
-  if(!currentEvidence||!currentEvidence.id){hideModal();return;}
+  if(!currentEvidence||!currentEvidence.id){
+    hideModal();
+    return;
+  }
+
   if(!found.has(currentEvidence.id)){
     found.add(currentEvidence.id);
-    Object.entries(currentEvidence.scores||{}).forEach(([k,v])=>scores[k]=Math.min(100,scores[k]+v));
+
+    Object.entries(currentEvidence.scores||{}).forEach(([key,value])=>{
+      scores[key]=Math.min(100,scores[key]+value);
+    });
   }
-  hideModal();renderEvidence();renderClues();updateProgress();
+
+  hideModal();
+  renderEvidence();
+  renderClues();
+  updateProgress();
 }
 
 function renderClues(){
   const list=document.getElementById("clueList");
-  if(found.size===0){list.innerHTML='<div class="clue">尚未取得線索。請從左側案發現場開始調查。</div>';return;}
+
+  if(found.size===0){
+    list.innerHTML='<div class="clue">尚未取得線索。請從左側案發現場開始調查。</div>';
+    return;
+  }
+
   list.innerHTML=[...found].map(id=>{
     const e=evidences.find(x=>x.id===id);
     return `<div class="clue ${e.good?"good":"strong"}"><strong>${e.tag}：</strong>${e.finding}</div>`;
@@ -295,25 +988,37 @@ function renderClues(){
 }
 
 function updateProgress(){
-  const count=Math.min(found.size,6);
-  document.getElementById("progressText").textContent=`${count} / 6`;
-  document.getElementById("progressBar").style.width=`${count/6*100}%`;
-  document.getElementById("toTrialBtn").disabled=found.size<6;
+  const count=Math.min(found.size,REQUIRED_CLUES);
+
+  document.getElementById("progressText").textContent=`${count} / ${REQUIRED_CLUES}`;
+  document.getElementById("progressBar").style.width=`${count/REQUIRED_CLUES*100}%`;
+  document.getElementById("toTrialBtn").disabled=found.size<REQUIRED_CLUES;
 }
 
 function hideModal(){
   document.getElementById("modal").classList.remove("show");
   document.getElementById("modalActions").style.display="flex";
 }
-function closeModal(e){if(e.target.id==="modal")hideModal();}
 
-function goTrial(){renderSuspects();showScreen("trial");}
+function closeModal(event){
+  if(event.target.id==="modal"){
+    hideModal();
+  }
+}
+
+function goTrial(){
+  renderSuspects();
+  showScreen("trial");
+}
 
 function renderSuspects(){
   document.getElementById("suspects").innerHTML=suspects.map(s=>`
     <button class="suspect ${selectedSuspect===s.id?"selected":""}" onclick="selectSuspect('${s.id}')">
-      <span class="emoji">${s.emoji}</span><strong>${s.title}</strong><small>${s.desc}</small>
-    </button>`).join("");
+      <span class="emoji">${s.emoji}</span>
+      <strong>${s.title}</strong>
+      <small>${s.desc}</small>
+    </button>
+  `).join("");
 }
 
 function selectSuspect(id){
@@ -324,6 +1029,7 @@ function selectSuspect(id){
 
 function showVerdict(){
   const suspect=suspects.find(s=>s.id===selectedSuspect);
+
   let title="真正的兇手不是單一工具";
   let summary="AI 會出錯，也會放大偏誤；但學習真正死亡的關鍵，是人把思考、查證、揭露與責任交出去。";
 
@@ -349,22 +1055,34 @@ function showVerdict(){
 
   document.getElementById("resultTitle").textContent=title;
   document.getElementById("resultSummary").textContent=`你的選擇：${suspect.title}。${summary}`;
+
   document.getElementById("scoreFact").textContent=Math.min(100,scores.fact);
   document.getElementById("scoreDisclosure").textContent=Math.min(100,scores.disclosure);
   document.getElementById("scoreEthics").textContent=Math.min(100,scores.ethics);
   document.getElementById("scoreAgency").textContent=Math.min(100,scores.agency);
+
   showScreen("result");
 }
 
 function copyReflection(){
   const text=document.getElementById("reflectionText").value.trim();
   const output=text||"我會先自己思考，再請 AI 協助整理；重要資料會查證；交作業或參賽作品時會說明我如何使用 AI。";
-  navigator.clipboard.writeText(output).then(()=>alert("已複製反思文字。"));
+
+  navigator.clipboard.writeText(output).then(()=>{
+    alert("已複製反思文字。");
+  });
 }
 
 function resetGame(){
-  found.clear();selectedSuspect=null;scores={fact:0,disclosure:0,ethics:0,agency:0};
-  const t=document.getElementById("reflectionText");if(t)t.value="";
+  found.clear();
+  selectedSuspect=null;
+  scores={fact:0,disclosure:0,ethics:0,agency:0};
+
+  const textarea=document.getElementById("reflectionText");
+  if(textarea){
+    textarea.value="";
+  }
+
   startGame();
 }
 </script>
