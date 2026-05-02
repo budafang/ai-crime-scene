@@ -14,6 +14,11 @@
       --red:#b91c1c;
       --red2:#fee2e2;
       --dark:#111827;
+      --green:#16a34a;
+      --green2:#f0fdf4;
+      --blue:#2563eb;
+      --blue2:#eff6ff;
+      --yellow:#fffbeb;
       --shadow:0 18px 50px rgba(31,41,55,.14);
       --radius:20px;
     }
@@ -72,6 +77,16 @@
       margin-bottom:16px;
     }
 
+    .badge.blue{
+      background:var(--blue2);
+      color:var(--blue);
+    }
+
+    .badge.green{
+      background:var(--green2);
+      color:var(--green);
+    }
+
     h1{
       font-size:clamp(34px,5vw,64px);
       line-height:1.02;
@@ -89,6 +104,20 @@
       margin:0 0 18px;
     }
 
+    .mission-box{
+      margin-top:18px;
+      padding:16px;
+      border:1px solid #bfdbfe;
+      background:#eff6ff;
+      border-radius:16px;
+      line-height:1.7;
+      color:#1e3a8a;
+    }
+
+    .mission-box strong{
+      color:#1d4ed8;
+    }
+
     .btn{
       border:0;
       border-radius:14px;
@@ -103,6 +132,8 @@
 
     .btn:hover{transform:translateY(-2px)}
     .btn.red{background:var(--red)}
+    .btn.green{background:var(--green)}
+
     .btn.secondary{
       background:#fff;
       color:#111827;
@@ -195,6 +226,7 @@
       font-size:13px;
       color:var(--muted);
       margin-bottom:6px;
+      gap:10px;
     }
 
     .progress{
@@ -256,11 +288,13 @@
       background:#111827;
       color:#fff;
       font-size:26px;
+      flex:0 0 auto;
     }
 
     .crime-title p{
       margin:4px 0 0;
       color:var(--muted);
+      line-height:1.5;
     }
 
     .victim{
@@ -268,8 +302,22 @@
       background:rgba(255,255,255,.82);
       border-radius:16px;
       padding:16px;
-      margin:14px 0 18px;
+      margin:14px 0 14px;
       line-height:1.7;
+    }
+
+    .instruction{
+      background:#eff6ff;
+      border:1px solid #bfdbfe;
+      color:#1e3a8a;
+      border-radius:16px;
+      padding:14px;
+      margin-bottom:18px;
+      line-height:1.7;
+    }
+
+    .instruction strong{
+      color:#1d4ed8;
     }
 
     .grid{
@@ -317,6 +365,26 @@
       box-shadow:0 2px 4px rgba(0,0,0,.25);
     }
 
+    .found .pin{
+      background:var(--green);
+    }
+
+    .status-tag{
+      display:inline-flex;
+      margin-top:8px;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      background:#f3f4f6;
+      color:#4b5563;
+    }
+
+    .found .status-tag{
+      background:#dcfce7;
+      color:#166534;
+    }
+
     .emoji{
       font-size:31px;
       display:block;
@@ -351,6 +419,9 @@
       display:grid;
       gap:10px;
       margin-top:12px;
+      max-height:430px;
+      overflow:auto;
+      padding-right:4px;
     }
 
     .clue{
@@ -386,6 +457,23 @@
       line-height:1.6;
     }
 
+    .threshold{
+      margin-top:14px;
+      padding:12px;
+      border-radius:14px;
+      background:#f8fafc;
+      border:1px solid #e5e7eb;
+      line-height:1.6;
+      font-size:14px;
+    }
+
+    .threshold.ready{
+      background:#f0fdf4;
+      border-color:#bbf7d0;
+      color:#166534;
+      font-weight:700;
+    }
+
     .modal-bg{
       position:fixed;
       inset:0;
@@ -415,6 +503,7 @@
       display:flex;
       justify-content:space-between;
       align-items:center;
+      gap:12px;
     }
 
     .modal-head h3{margin:0}
@@ -447,7 +536,23 @@
       line-height:1.65;
     }
 
+    .finding.good{
+      background:#f0fdf4;
+      border-color:#bbf7d0;
+    }
+
     .finding strong{color:var(--red)}
+    .finding.good strong{color:var(--green)}
+
+    .hint-box{
+      padding:16px;
+      border-radius:16px;
+      background:#eff6ff;
+      border:1px solid #bfdbfe;
+      color:#1e3a8a;
+      line-height:1.7;
+      margin-bottom:18px;
+    }
 
     .trial{padding:28px}
 
@@ -569,7 +674,16 @@
           <div class="badge">🕵️ 賽前互動遊戲｜AI 素養破案</div>
           <h1>AI 犯罪現場：誰殺死了學習？</h1>
           <p class="subtitle">一份看似完美的作業交出去了，老師給了高分。但隔天，學生發現自己什麼都不會。請進入案發現場，找出真正的兇手。</p>
-          <p class="subtitle">這不是要禁止 AI，而是要讓學生理解：AI 可以協助學習，但不能取代判斷、查證、揭露與責任。</p>
+          <p class="subtitle">你不是來考選擇題，而是來當偵探。你的任務是調查證物，判斷「學習為什麼死亡」。</p>
+
+          <div class="mission-box">
+            <strong>遊戲任務：</strong><br>
+            1. 點選案發現場的證物。<br>
+            2. 覺得這個證物有用，就按「收進偵探筆記」。<br>
+            3. 至少蒐集 8 個線索後，可以進入審判。<br>
+            4. 你也可以繼續調查更多證物，讓判斷更完整。
+          </div>
+
           <div class="row">
             <button class="btn red" onclick="startGame()">開始破案</button>
             <button class="btn secondary" onclick="showTeacherMode()">教師使用說明</button>
@@ -598,8 +712,8 @@
 
         <div class="progress-wrap">
           <div class="progress-label">
-            <span>破案進度</span>
-            <strong id="progressText">0 / 8</strong>
+            <span id="progressText">已蒐集 0 個線索｜審判門檻：8 個</span>
+            <strong id="progressStatus">尚未達標</strong>
           </div>
           <div class="progress"><span id="progressBar"></span></div>
         </div>
@@ -614,7 +728,7 @@
               <div class="crime-icon">☠️</div>
               <div>
                 <h2>案發現場</h2>
-                <p>點選證物，蒐集線索。找滿 8 個線索後進入審判。</p>
+                <p>請調查下方證物。每個證物都藏著一種 AI 使用風險或解法。</p>
               </div>
             </div>
 
@@ -623,26 +737,37 @@
               死因初判：表面完成任務，但學習歷程被外包；缺乏查證、揭露、反思與人的判斷。
             </div>
 
+            <div class="instruction">
+              <strong>你現在要做什麼？</strong><br>
+              點開一張證物卡，閱讀內容後決定是否「收進偵探筆記」。<br>
+              收進筆記才會算作一條線索。至少蒐集 8 條線索後，你就可以進入審判；也可以繼續調查更多證物。
+            </div>
+
             <div id="evidenceGrid" class="grid"></div>
           </div>
         </section>
 
         <aside class="detective">
           <h3>偵探筆記</h3>
-          <p>每個證物都對應一個 AI 素養概念。請判斷：這裡的問題是 AI 本身，還是人把學習、倫理與責任交出去了？</p>
+          <p>這裡會整理你收錄的線索。請從這些線索判斷：真正殺死學習的，是 AI 本身，還是錯誤的 AI 使用方式？</p>
+
+          <div id="thresholdBox" class="threshold">
+            尚未達到審判門檻。請至少收集 8 個線索。
+          </div>
 
           <div id="clueList" class="clues">
             <div class="clue">尚未取得線索。請從左側案發現場開始調查。</div>
           </div>
 
           <div class="note">
-            <strong>破案目標</strong>
+            <strong>你正在調查的 AI 素養問題</strong>
             <ul>
-              <li>辨識 AI 幻覺與錯誤資料</li>
-              <li>理解學習外包的風險</li>
-              <li>知道何時需要揭露 AI 使用</li>
-              <li>理解個資、肖像與偏誤問題</li>
-              <li>建立「人主導，AI 協助」的使用原則</li>
+              <li>AI 幻覺與錯誤資料</li>
+              <li>學習外包與過度依賴</li>
+              <li>AI 使用揭露與作者責任</li>
+              <li>個資、肖像與隱私風險</li>
+              <li>演算法偏誤與公平問題</li>
+              <li>人類判斷與責任歸屬</li>
             </ul>
           </div>
         </aside>
@@ -653,7 +778,13 @@
       <div class="trial">
         <div class="badge">⚖️ 最終審判</div>
         <h1 style="font-size:clamp(32px,4vw,52px)">誰殺死了學習？</h1>
-        <p class="subtitle">根據你蒐集到的證物，請選出你認為最主要的兇手。這題沒有單一死背答案，但你的選擇會反映你對 AI 素養的理解。</p>
+
+        <div class="hint-box">
+          <strong>審判說明：</strong><br>
+          這不是單選題考試，而是一次責任判斷。請根據你收集到的線索，判斷「學習死亡」的主因是什麼。你可以選 AI 本身、學生使用方式、教師規範、平台環境，或整個系統共同造成。
+        </div>
+
+        <p class="subtitle">請選出你認為最主要的原因。你的選擇會影響最後判決書的說明。</p>
 
         <div id="suspects" class="suspects"></div>
 
@@ -718,8 +849,8 @@
         <div id="modalFinding" class="finding"></div>
 
         <div id="modalActions" class="row">
-          <button class="btn red" onclick="collectCurrentEvidence()">收進偵探筆記</button>
-          <button class="btn secondary" onclick="hideModal()">先不收錄</button>
+          <button id="collectBtn" class="btn red" onclick="collectCurrentEvidence()">收進偵探筆記（算作 1 條線索）</button>
+          <button class="btn secondary" onclick="hideModal()">回到案發現場</button>
         </div>
       </div>
     </div>
@@ -903,6 +1034,7 @@ const REQUIRED_CLUES=8;
 const found=new Set();
 let currentEvidence=null;
 let selectedSuspect=null;
+let thresholdNotified=false;
 let scores={fact:0,disclosure:0,ethics:0,agency:0};
 
 function showScreen(id){
@@ -921,12 +1053,13 @@ function startGame(){
 function showTeacherMode(){
   currentEvidence={
     title:"教師使用說明",
-    doc:"建議流程：\n1. 開場先問學生：「AI 是兇手嗎？」\n2. 讓學生玩 8–12 分鐘，點選證物蒐集線索。\n3. 進入審判，讓學生投票誰殺死了學習。\n4. 公布反轉：真正的問題不是 AI，而是沒有判斷、查證、揭露與責任的使用方式。\n5. 最後請學生寫三句反思，作為賽前說明會的離場票。",
+    doc:"建議流程：\n1. 開場先問學生：「AI 是兇手嗎？」\n2. 讓學生玩 8–12 分鐘，點選證物蒐集線索。\n3. 學生至少蒐集 8 個線索後進入審判。\n4. 審判不是標準答案，而是引導學生討論責任歸屬。\n5. 最後請學生寫三句反思，作為賽前說明會的離場票。",
     finding:"教學重點：AI 素養不是禁止使用 AI，而是能判斷何時使用、如何查證、如何揭露、如何保護他人與如何承擔責任。"
   };
 
   document.getElementById("modalTitle").textContent=currentEvidence.title;
   document.getElementById("modalDoc").textContent=currentEvidence.doc;
+  document.getElementById("modalFinding").className="finding";
   document.getElementById("modalFinding").innerHTML="<strong>教師提醒：</strong>"+currentEvidence.finding;
   document.getElementById("modalActions").style.display="none";
   document.getElementById("modal").classList.add("show");
@@ -939,6 +1072,7 @@ function renderEvidence(){
       <span class="emoji">${e.emoji}</span>
       <strong>${e.title}</strong>
       <small>${e.hint}</small>
+      <span class="status-tag">${found.has(e.id)?"已收錄":"尚未收錄"}</span>
     </button>
   `).join("");
 }
@@ -948,8 +1082,19 @@ function openEvidence(id){
 
   document.getElementById("modalTitle").textContent=`${currentEvidence.emoji} ${currentEvidence.title}`;
   document.getElementById("modalDoc").textContent=currentEvidence.doc;
+  document.getElementById("modalFinding").className=`finding ${currentEvidence.good?"good":""}`;
   document.getElementById("modalFinding").innerHTML=`<strong>${currentEvidence.good?"關鍵解法":"破案線索"}：</strong>${currentEvidence.finding}`;
   document.getElementById("modalActions").style.display="flex";
+
+  const collectBtn=document.getElementById("collectBtn");
+  if(found.has(currentEvidence.id)){
+    collectBtn.textContent="已收錄，回到案發現場";
+    collectBtn.className="btn green";
+  }else{
+    collectBtn.textContent="收進偵探筆記（算作 1 條線索）";
+    collectBtn.className="btn red";
+  }
+
   document.getElementById("modal").classList.add("show");
 }
 
@@ -959,18 +1104,57 @@ function collectCurrentEvidence(){
     return;
   }
 
-  if(!found.has(currentEvidence.id)){
-    found.add(currentEvidence.id);
-
-    Object.entries(currentEvidence.scores||{}).forEach(([key,value])=>{
-      scores[key]=Math.min(100,scores[key]+value);
-    });
+  if(found.has(currentEvidence.id)){
+    hideModal();
+    return;
   }
+
+  found.add(currentEvidence.id);
+
+  Object.entries(currentEvidence.scores||{}).forEach(([key,value])=>{
+    scores[key]=Math.min(100,scores[key]+value);
+  });
+
+  const justReachedThreshold=found.size===REQUIRED_CLUES && !thresholdNotified;
 
   hideModal();
   renderEvidence();
   renderClues();
   updateProgress();
+
+  if(justReachedThreshold){
+    thresholdNotified=true;
+    showThresholdModal();
+  }
+}
+
+function showThresholdModal(){
+  currentEvidence={
+    title:"你已經蒐集到足夠線索",
+    doc:"你已經達到審判門檻。\n\n現在你有兩種選擇：\n1. 直接進入審判，判斷誰殺死了學習。\n2. 繼續調查其他證物，讓你的判斷更完整。",
+    finding:"提醒：第 8 個線索不是上限，而是進入審判的最低門檻。你可以繼續收集第 9 個、第 10 個線索。"
+  };
+
+  document.getElementById("modalTitle").textContent="✅ 審判門檻已達成";
+  document.getElementById("modalDoc").textContent=currentEvidence.doc;
+  document.getElementById("modalFinding").className="finding good";
+  document.getElementById("modalFinding").innerHTML="<strong>破案提示：</strong>"+currentEvidence.finding;
+  document.getElementById("modalActions").style.display="flex";
+
+  const actions=document.getElementById("modalActions");
+  actions.innerHTML=`
+    <button class="btn red" onclick="hideModal(); goTrial();">現在進入審判</button>
+    <button class="btn secondary" onclick="restoreModalActions(); hideModal();">繼續調查證物</button>
+  `;
+
+  document.getElementById("modal").classList.add("show");
+}
+
+function restoreModalActions(){
+  document.getElementById("modalActions").innerHTML=`
+    <button id="collectBtn" class="btn red" onclick="collectCurrentEvidence()">收進偵探筆記（算作 1 條線索）</button>
+    <button class="btn secondary" onclick="hideModal()">回到案發現場</button>
+  `;
 }
 
 function renderClues(){
@@ -988,16 +1172,28 @@ function renderClues(){
 }
 
 function updateProgress(){
-  const count=Math.min(found.size,REQUIRED_CLUES);
+  const count=found.size;
+  const progressCount=Math.min(count,REQUIRED_CLUES);
+  const ready=count>=REQUIRED_CLUES;
 
-  document.getElementById("progressText").textContent=`${count} / ${REQUIRED_CLUES}`;
-  document.getElementById("progressBar").style.width=`${count/REQUIRED_CLUES*100}%`;
-  document.getElementById("toTrialBtn").disabled=found.size<REQUIRED_CLUES;
+  document.getElementById("progressText").textContent=`已蒐集 ${count} 個線索｜審判門檻：${REQUIRED_CLUES} 個`;
+  document.getElementById("progressStatus").textContent=ready?"可以審判":"尚未達標";
+  document.getElementById("progressBar").style.width=`${progressCount/REQUIRED_CLUES*100}%`;
+  document.getElementById("toTrialBtn").disabled=!ready;
+
+  const thresholdBox=document.getElementById("thresholdBox");
+  if(ready){
+    thresholdBox.className="threshold ready";
+    thresholdBox.textContent=`已達審判門檻。你已蒐集 ${count} 個線索，可以進入審判，也可以繼續調查。`;
+  }else{
+    thresholdBox.className="threshold";
+    thresholdBox.textContent=`尚未達到審判門檻。還需要 ${REQUIRED_CLUES-count} 個線索。`;
+  }
 }
 
 function hideModal(){
   document.getElementById("modal").classList.remove("show");
-  document.getElementById("modalActions").style.display="flex";
+  restoreModalActions();
 }
 
 function closeModal(event){
@@ -1041,7 +1237,7 @@ function showVerdict(){
     summary="學生、教師規範、平台環境與 AI 工具都會影響學習。最好的解法不是找單一代罪羔羊，而是建立清楚的 AI 使用流程。";
   }else if(selectedSuspect==="ai"){
     title="AI 有風險，但它不是唯一兇手";
-    summary="AI 可能幻覺、偏誤、生成錯誤內容；但人仍需要查證、揭露與負責。把所有責任推給 AI，也是一種逃避。";
+    summary="AI 確實有幻覺、偏誤與錯誤資訊的風險。但如果人沒有查證、沒有揭露、沒有保留判斷，問題才會真正傷害學習。";
   }else if(selectedSuspect==="student"){
     title="學生有責任，但不能只怪學生";
     summary="學生需要保留學習主體性；同時，課堂規範與工具環境也要提供清楚界線。";
@@ -1076,6 +1272,7 @@ function copyReflection(){
 function resetGame(){
   found.clear();
   selectedSuspect=null;
+  thresholdNotified=false;
   scores={fact:0,disclosure:0,ethics:0,agency:0};
 
   const textarea=document.getElementById("reflectionText");
